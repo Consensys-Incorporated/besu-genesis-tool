@@ -1,6 +1,6 @@
 {
   "name": "@consensys/besu-genesis-tool",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A utility that lets developers create Besu genesis files, node keys, account keys and config",
   "type": "module",
   "main": "build/index.js",
