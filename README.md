@@ -45,7 +45,7 @@ Choose number of bootnode node keys to generate: (integer) Default: 2
 Choose number of validator node keys to generate: (integer) Default: 4
 Choose number of member node keys to generate: (integer) Default: 1
 Set your account password: (empty for none)
-Include quorum-dev-quickstart test accounts: [y/N]
+Include besu-dev-quickstart test accounts: [y/N]
 Include JSON format of the prefunded account {'address': { 'balance': '100000'}}: (default {})
 Set your output path for the artifacts: (default ./output)
 ```
@@ -87,7 +87,7 @@ Options:
   --accountPassword        Password for keys              [string] [default: ""]
   --outputPath             Output path relative to current directory
                                                   [string] [default: "./output"]
-  --quickstartDevAccounts  Include quorum-dev-quickstart test accounts
+  --quickstartDevAccounts  Include besu-dev-quickstart test accounts
                                            [boolean] [required] [default: false]
   --genesisNodeAllocation  Balance allocated to each nodes
                    [string] [required] [default: "1000000000000000000000000000"]
@@ -125,7 +125,7 @@ Each node (bootnode, validator and member) gets an Ethereum account, stored in t
 
 Use `--alloc` to prefund other accounts.
 
-`--quickstartDevAccounts` adds the well-known [quorum-dev-quickstart](https://github.com/consensys-incorporated/quorum-dev-quickstart) test accounts to the genesis. It defaults to `false`, on the assumption that the genesis is for production. _**Never use these accounts in production. Their private keys are public.**_
+`--quickstartDevAccounts` adds the well-known [besu-dev-quickstart](https://github.com/consensys-incorporated/besu-dev-quickstart) test accounts to the genesis. It defaults to `false`, on the assumption that the genesis is for production. _**Never use these accounts in production. Their private keys are public.**_
 
 ## Output
 

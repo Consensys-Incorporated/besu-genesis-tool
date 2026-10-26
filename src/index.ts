@@ -115,7 +115,7 @@ export async function main(): Promise<void> {
           type: "boolean",
           demandOption: true,
           default: false,
-          describe: "Include quorum-dev-quickstart test accounts",
+          describe: "Include besu-dev-quickstart test accounts",
         },
         genesisNodeAllocation: {
           type: "string",

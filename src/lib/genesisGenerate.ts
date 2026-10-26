@@ -11,7 +11,7 @@ function createDefaultGenesis(): Genesis {
   const DefaultAlloc: Alloc = {
     balance: "90000000000000000000000",
     comment:
-      "test account from quorum-dev-quickstart -- please remove me before entering production",
+      "test account from besu-dev-quickstart -- please remove me before entering production",
   };
 
   const DefaultGenesisConfig: GenesisConfig = {

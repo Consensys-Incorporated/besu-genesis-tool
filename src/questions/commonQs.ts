@@ -7,7 +7,7 @@ export const outputPathQuestion: QuestionTree = {
 
 export const quickstartDevAccountsQuestion: QuestionTree = {
   name: "quickstartDevAccounts",
-  prompt: "Include quorum-dev-quickstart test accounts: [y/N]",
+  prompt: "Include besu-dev-quickstart test accounts: [y/N]",
 };
 
 export const genesisNodeAllocationQuestion: QuestionTree = {
