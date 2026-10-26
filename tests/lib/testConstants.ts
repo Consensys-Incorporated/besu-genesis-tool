@@ -15,13 +15,13 @@ export const TEST_QUORUM_CONFIG: QuorumConfig = {
   validators: 4,
   members: 2,
   bootnodes: 2,
-  accountPassword: "",
   curve: CryptoCurve.k1,
   outputPath: "./output",
   quickstartDevAccounts: false,
   noOutputTimestamp: false,
   prefundedAccounts: "{}",
-  genesisNodeAllocation: "100",
+  accounts: 2,
+  accountBalance: "100",
 };
 
 export const TEST_NODE = {

@@ -3,9 +3,10 @@ import { QuorumConfig } from "../types/quorumConfig.ts";
 import { Genesis, GenesisConfig, Alloc } from "../types/genesis.ts";
 import fs from "fs";
 import { CryptoCurve } from "../types/cryptoCurve.ts";
-import { NodeKeys } from "../types/nodeKeys.ts";
+import { EthAccount } from "../types/nodeKeys.ts";
 
 const GENESIS_FILE = "genesis.json";
+export const DEFAULT_ACCOUNT_BALANCE = "1000000000000000000000000000";
 
 function createDefaultGenesis(): Genesis {
   const DefaultAlloc: Alloc = {
@@ -59,7 +60,7 @@ export function createBesuGenesis(
   path: string,
   quorumConfig: QuorumConfig,
   extraData: string,
-  node: NodeKeys[]
+  accounts: EthAccount[]
 ): string {
   const genesisFile = path + "/" + GENESIS_FILE;
   const besu: Genesis = createDefaultGenesis();
@@ -77,9 +78,9 @@ export function createBesuGenesis(
   if (quorumConfig.quickstartDevAccounts === false) {
     besu.alloc = {};
   }
-  node.forEach((account) => {
-    besu.alloc[account.ethAccount.address] = {
-      balance: quorumConfig.genesisNodeAllocation,
+  accounts.forEach((account) => {
+    besu.alloc[account.address] = {
+      balance: quorumConfig.accountBalance ?? DEFAULT_ACCOUNT_BALANCE,
     };
   });
 

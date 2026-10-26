@@ -99,12 +99,6 @@ export async function main(): Promise<void> {
           describe: "Number of bootnode node keys to generate",
         },
         // curve: { type: 'string', demandOption: false, default: CryptoCurve.k1, choices: [CryptoCurve.k1, CryptoCurve.r1], describe: 'Type of curve for keys' },
-        accountPassword: {
-          type: "string",
-          demandOption: false,
-          default: "",
-          describe: "Password for keys",
-        },
         outputPath: {
           type: "string",
           demandOption: false,
@@ -117,17 +111,23 @@ export async function main(): Promise<void> {
           default: false,
           describe: "Include besu-dev-quickstart test accounts",
         },
-        genesisNodeAllocation: {
-          type: "string",
-          demandOption: true,
-          default: "1000000000000000000000000000",
-          describe: "Balance allocated to each nodes",
-        },
         alloc: {
           type: "string",
-          demandOption: true,
+          demandOption: false,
           default: "{}",
-          describe: "JSON format of the prefunded accounts {'address': { balance: '100000'}}",
+          describe: "Existing accounts to prefund, as JSON {'address': { balance: '100000'}}",
+        },
+        accounts: {
+          type: "number",
+          demandOption: false,
+          default: 0,
+          describe: "Number of new accounts to generate and prefund",
+        },
+        accountBalance: {
+          type: "string",
+          demandOption: false,
+          default: "1000000000000000000000000000",
+          describe: "Balance allocated to each generated account",
         },
         noOutputTimestamp: {
           type: "boolean",
@@ -154,12 +154,12 @@ export async function main(): Promise<void> {
       members: args.members,
       bootnodes: args.bootnodes,
       curve: args.curve,
-      accountPassword: args.accountPassword,
       outputPath: args.outputPath,
       quickstartDevAccounts: args.quickstartDevAccounts,
       noOutputTimestamp: args.noOutputTimestamp,
       prefundedAccounts: args.alloc,
-      genesisNodeAllocation: args.genesisNodeAllocation,
+      accounts: args.accounts,
+      accountBalance: args.accountBalance,
     };
   } else {
     const qr = new QuestionRenderer(rootQuestion);

@@ -10,21 +10,27 @@ export const quickstartDevAccountsQuestion: QuestionTree = {
   prompt: "Include besu-dev-quickstart test accounts: [y/N]",
 };
 
-export const genesisNodeAllocationQuestion: QuestionTree = {
-  name: "genesisNodeAllocation",
+export const accountSourceQuestion: QuestionTree = {
+  name: "accountSource",
   prompt:
-    "Balance allocated to each nodes: (default 1000000000000000000000000000)",
+    "Prefund accounts in the genesis? Besu does not need any to run, and you would normally hold account keys in a wallet such as MetaMask. Default: None",
+};
+
+export const accountsQuestion: QuestionTree = {
+  name: "accounts",
+  prompt: "Choose number of accounts to generate: (integer) Default: 1",
+};
+
+export const accountBalanceQuestion: QuestionTree = {
+  name: "accountBalance",
+  prompt:
+    "Balance allocated to each generated account: (default 1000000000000000000000000000)",
 };
 
 export const prefundedAccountsQuestion: QuestionTree = {
   name: "prefundedAccounts",
   prompt:
-    "Include JSON format of the prefunded account {'address': { 'balance': '100000'}}: (default {})",
-};
-
-export const accountPasswordQuestion: QuestionTree = {
-  name: "accountPassword",
-  prompt: "Set your account password: (empty for none)",
+    "Enter the accounts to prefund as JSON {'address': { 'balance': '100000'}}:",
 };
 
 export const curveQuestion: QuestionTree = {

@@ -76,30 +76,6 @@ export function stringValidator(
   };
 }
 
-export function passwordValidator(
-  question: QuestionTree,
-  nextQuestion?: QuestionTree
-) {
-  return (rawInput: string, answers: AnswerMap) => {
-    const normalizedInput = rawInput.toString();
-    if (normalizedInput === "") {
-      answers[question.name] = normalizedInput;
-      return nextQuestion;
-    } else if (typeof normalizedInput === "string" && normalizedInput !== "") {
-      answers[question.name] = normalizedInput;
-      return nextQuestion;
-    } else {
-      console.log(
-        chalk.red(
-          "Sorry, but I didn't understand your answer. Please enter a valid string,\n" +
-            "or just hit enter default is available.\n"
-        )
-      );
-      return question;
-    }
-  };
-}
-
 const allocJsonChecks = (jsonAlloc: string) => {
   try {
     const parsedJSON = JSON.parse(jsonAlloc) as { [key: string]: Alloc };

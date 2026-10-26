@@ -1,28 +1,42 @@
 import { QuorumConfig } from "../types/quorumConfig.ts";
-import { NodeKeys, Address } from "../types/nodeKeys.ts";
+import { NodeKeys, Address, EthAccount } from "../types/nodeKeys.ts";
 import { CryptoCurve } from "../types/cryptoCurve.ts";
 import * as genesis from "./genesisGenerate.ts";
 import * as fileHandler from "./fileHandler.ts";
 import * as nodekeys from "./nodeKeys.ts";
 import * as besuConfig from "./besuConfig.ts";
 
-async function generateNodeConfig(
+function generateNodeConfig(
   numNodes: number,
   nodeType: string,
-  accountPassword: string,
   curve: CryptoCurve,
   outputDir: string
-): Promise<NodeKeys[]> {
+): NodeKeys[] {
   const nNodes = numNodes;
   const nodes: NodeKeys[] = [];
   for (let i = 0; i < nNodes; i++) {
-    const nodeData = await nodekeys.generateNodeKeys(accountPassword, curve);
+    const nodeData = nodekeys.generateNodeKeys(curve);
     nodes.push(nodeData);
   }
   nodes.map((v, i) => {
     fileHandler.writeNodeKeys(outputDir + "/" + nodeType + i.toString(), v);
   });
   return nodes;
+}
+
+// prefunded accounts, independent of the nodes - besu doesn't need these to run
+async function generateAccounts(
+  numAccounts: number,
+  outputDir: string
+): Promise<EthAccount[]> {
+  const accounts: EthAccount[] = [];
+  for (let i = 0; i < numAccounts; i++) {
+    // keystores have no password; users can import the private key into a wallet to protect it
+    const account = await nodekeys.generateEthAccount("");
+    fileHandler.writeAccount(outputDir + "/accounts/account" + i.toString(), account);
+    accounts.push(account);
+  }
+  return accounts;
 }
 
 export async function generateNetworkConfig(
@@ -38,28 +52,25 @@ export async function generateNetworkConfig(
   fileHandler.setupOutputFolder(outputDir, quorumConfig);
 
   console.log("Creating bootnodes...");
-  const bootnodes = await generateNodeConfig(
+  const bootnodes = generateNodeConfig(
     quorumConfig.bootnodes,
     "bootnode",
-    quorumConfig.accountPassword,
     quorumConfig.curve,
     outputDir
   );
 
   console.log("Creating members...");
-  const members = await generateNodeConfig(
+  const members = generateNodeConfig(
     quorumConfig.members,
     "member",
-    quorumConfig.accountPassword,
     quorumConfig.curve,
     outputDir
   );
 
   console.log("Creating validators...");
-  const validators = await generateNodeConfig(
+  const validators = generateNodeConfig(
     quorumConfig.validators,
     "validator",
-    quorumConfig.accountPassword,
     quorumConfig.curve,
     outputDir
   );
@@ -69,8 +80,8 @@ export async function generateNetworkConfig(
     quorumConfig.consensus
   );
 
-  // concatenate NodeKeys array to pass into the Genesis functions
-  const NodeKeyConcat: NodeKeys[] = bootnodes.concat(members, validators);
+  console.log("Creating accounts...");
+  const accounts = await generateAccounts(quorumConfig.accounts ?? 0, outputDir);
 
   // static nodes generation
   const allNodes: NodeKeys[] = validators.concat(bootnodes, members);
@@ -79,7 +90,7 @@ export async function generateNetworkConfig(
   );
 
   fileHandler.createStaticNodes(outputDir, allNodesEnodes);
-  genesis.createBesuGenesis(outputDir, quorumConfig, extraData, NodeKeyConcat);
+  genesis.createBesuGenesis(outputDir, quorumConfig, extraData, accounts);
   besuConfig.createBesuConfig(bootnodes, quorumConfig, outputDir);
   fileHandler.createBesuPermissionsFile(outputDir, allNodesEnodes);
 

@@ -45,16 +45,14 @@ export async function generateEthAccount(password: string): Promise<EthAccount> 
   return ethAccount;
 }
 
-export async function generateNodeKeys(password: string, curve: CryptoCurve): Promise<NodeKeys> {
+export function generateNodeKeys(curve: CryptoCurve): NodeKeys {
   const privateKey: PrivateKey = generatePrivateKey(curve);
   const publicKey: PublicKey = derivePublicKey(privateKey, curve);
   const address: Address = deriveAddress(publicKey);
-  const ethAccount: EthAccount = await generateEthAccount(password);
   const nodeKeys: NodeKeys = {
     privateKey,
     publicKey,
-    address,
-    ethAccount
+    address
   };
   return nodeKeys;
 }

@@ -30,8 +30,8 @@ describe("NodeKeys generation", () => {
     expect(account).not.toBe(null);
   });
 
-  it("should generate an object with nodekeys and account keys", async () => {
-    const nodeKeys : NodeKeys = await nodekeys.generateNodeKeys(TEST_NODE.password, TEST_NODE.curve);
+  it("should generate an object with nodekeys", () => {
+    const nodeKeys : NodeKeys = nodekeys.generateNodeKeys(TEST_NODE.curve);
     expect(nodeKeys).not.toBe(null);
   });
 
@@ -42,8 +42,8 @@ describe("NodeKeys generation", () => {
     expect(nodekeys.derivePublicKey(priv, CryptoCurve.r1).toString("hex")).toBe(ecdh.getPublicKey("hex").slice(2));
   });
 
-  it("should generate nodekeys on the r1 curve", async () => {
-    const nodeKeys : NodeKeys = await nodekeys.generateNodeKeys(TEST_NODE.password, CryptoCurve.r1);
+  it("should generate nodekeys on the r1 curve", () => {
+    const nodeKeys : NodeKeys = nodekeys.generateNodeKeys(CryptoCurve.r1);
     expect(nodeKeys.publicKey.length).toBe(64);
   });
 

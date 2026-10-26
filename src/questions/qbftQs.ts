@@ -1,72 +1,14 @@
 // import { CryptoCurve } from "../types/cryptoCurve.ts";
 import { QuestionTree } from "../types/questions.ts";
-import {
-  integerValidator,
-  passwordValidator,
-  stringValidator,
-  getYesNoValidator,
-  allocStringValidator
-} from "./common.ts";
+import { integerValidator, stringValidator } from "./common.ts";
 import * as commonQs from "./commonQs.ts";
-
-
-const _outputPathQuestion: QuestionTree = Object.assign(
-  {},
-  commonQs.outputPathQuestion
-);
-_outputPathQuestion.transformerValidator = stringValidator(
-  _outputPathQuestion,
-  undefined,
-  "./output"
-);
-
-const _prefundedAccountsQuestion: QuestionTree = Object.assign(
-  {},
-  commonQs.prefundedAccountsQuestion
-);
-
-_prefundedAccountsQuestion.transformerValidator = allocStringValidator(
-  _prefundedAccountsQuestion,
-  _outputPathQuestion,
-  "{}"
-);
-
-const _genesisNodeAllocationQuestion: QuestionTree = Object.assign(
-  {},
-  commonQs.genesisNodeAllocationQuestion
-);
-_genesisNodeAllocationQuestion.transformerValidator = stringValidator(
-  _genesisNodeAllocationQuestion,
-  _prefundedAccountsQuestion,
-  "1000000000000000000000000000"
-);
-
-
-const _quickstartDevAccountsQuestion: QuestionTree = Object.assign(
-  {},
-  commonQs.quickstartDevAccountsQuestion
-);
-_quickstartDevAccountsQuestion.transformerValidator = getYesNoValidator(
-  _quickstartDevAccountsQuestion,
-  _genesisNodeAllocationQuestion,
-  "n"
-);
-
-const _accountPasswordQuestion: QuestionTree = Object.assign(
-  {},
-  commonQs.accountPasswordQuestion
-);
-_accountPasswordQuestion.transformerValidator = passwordValidator(
-  _accountPasswordQuestion,
-  _quickstartDevAccountsQuestion
-);
-
+import { accountSourceQuestion } from "./accountsQs.ts";
 
 
 // const _curveQuestion: QuestionTree = Object.assign({}, commonQs.curveQuestion);
 // _curveQuestion.options = [
-//   { label: "secp256k1", value: CryptoCurve.k1, nextQuestion: _accountPasswordQuestion, default: true },
-//   { label: "secp256r1", value: CryptoCurve.r1, nextQuestion: _accountPasswordQuestion }
+//   { label: "secp256k1", value: CryptoCurve.k1, nextQuestion: accountSourceQuestion, default: true },
+//   { label: "secp256r1", value: CryptoCurve.r1, nextQuestion: accountSourceQuestion }
 // ];
 
 const _membersQuestion: QuestionTree = Object.assign(
@@ -75,7 +17,7 @@ const _membersQuestion: QuestionTree = Object.assign(
 );
 _membersQuestion.transformerValidator = integerValidator(
   _membersQuestion,
-  _accountPasswordQuestion,
+  accountSourceQuestion,
   1
 );
 

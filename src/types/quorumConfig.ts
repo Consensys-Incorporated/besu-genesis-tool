@@ -15,10 +15,10 @@ export type QuorumConfig = {
   members: number;
   bootnodes: number;
   curve: CryptoCurve;
-  accountPassword: string;
   outputPath: string;
   quickstartDevAccounts: boolean;
   noOutputTimestamp: boolean;
-  prefundedAccounts: string;
-  genesisNodeAllocation: string;
+  prefundedAccounts?: string;
+  accounts?: number;
+  accountBalance?: string;
 };

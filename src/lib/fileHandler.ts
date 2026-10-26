@@ -1,7 +1,7 @@
 
 import njks from "nunjucks";
 import { QuorumConfig } from "../types/quorumConfig.ts";
-import { NodeKeys } from "../types/nodeKeys.ts";
+import { NodeKeys, EthAccount } from "../types/nodeKeys.ts";
 import fs from "fs";
 import path from "path";
 
@@ -33,11 +33,13 @@ export function writeNodeKeys(path: string, nodekeys: NodeKeys): void {
   fs.writeFileSync(path + "/nodekey", nodekeys.privateKey.toString('hex'));
   fs.writeFileSync(path + "/nodekey.pub", nodekeys.publicKey.toString('hex'));
   fs.writeFileSync(path + "/address", nodekeys.address.toString('hex'));
-  // account keys
-  fs.writeFileSync(path + "/accountKeystore", nodekeys.ethAccount.keystore);
-  fs.writeFileSync(path + "/accountPassword", nodekeys.ethAccount.password);
-  fs.writeFileSync(path + "/accountPrivateKey", nodekeys.ethAccount.privateKey);
-  fs.writeFileSync(path + "/accountAddress", nodekeys.ethAccount.address);
+}
+
+export function writeAccount(path: string, account: EthAccount): void {
+  if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true });
+  fs.writeFileSync(path + "/address", account.address);
+  fs.writeFileSync(path + "/privateKey", account.privateKey);
+  fs.writeFileSync(path + "/keystore", account.keystore);
 }
 
 export function createStaticNodes(path: string, nodes: string[]): void {

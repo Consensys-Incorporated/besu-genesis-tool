@@ -1,6 +1,6 @@
 # Besu Genesis Tool
 
-A CLI that generates everything you need to stand up an [LFDT Besu](https://docs.besu-eth.org/) (formerly under the Hyperledger project) network: a genesis file, node keys, account keys, static nodes, a permissions file and a starter `config.toml`.
+A CLI that generates everything you need to stand up an [LFDT Besu](https://docs.besu-eth.org/) (formerly under the Hyperledger project) network: a genesis file, node keys, static nodes, a permissions file and a starter `config.toml`. It can also prefund accounts in the genesis, either ones you already hold or new ones it generates.
 
 Supported consensus protocols: **QBFT** (default), **IBFT2** and **Clique**.
 
@@ -44,13 +44,15 @@ Set your max code size value: (integer) Default: 64
 Choose number of bootnode node keys to generate: (integer) Default: 2
 Choose number of validator node keys to generate: (integer) Default: 4
 Choose number of member node keys to generate: (integer) Default: 1
-Set your account password: (empty for none)
+Prefund accounts in the genesis? Besu does not need any to run, and you would normally hold account keys in a wallet such as MetaMask. Default: None
+        1. None
+        2. Add existing accounts by address (alloc JSON)
+        3. Generate new accounts
 Include besu-dev-quickstart test accounts: [y/N]
-Include JSON format of the prefunded account {'address': { 'balance': '100000'}}: (default {})
 Set your output path for the artifacts: (default ./output)
 ```
 
-QBFT also asks for the balance allocated to each node's account.
+Option 2 asks for the accounts as JSON, `{"<address>": {"balance": "<wei>"}}`. Option 3 asks how many accounts to generate and the balance for each.
 
 ### Non-interactive
 
@@ -84,16 +86,16 @@ Options:
                                                 [number] [required] [default: 1]
   --bootnodes              Number of bootnode node keys to generate
                                                 [number] [required] [default: 2]
-  --accountPassword        Password for keys              [string] [default: ""]
   --outputPath             Output path relative to current directory
                                                   [string] [default: "./output"]
   --quickstartDevAccounts  Include besu-dev-quickstart test accounts
                                            [boolean] [required] [default: false]
-  --genesisNodeAllocation  Balance allocated to each nodes
-                   [string] [required] [default: "1000000000000000000000000000"]
-  --alloc                  JSON format of the prefunded accounts {'address': {
-                           balance: '100000'}}
-                                             [string] [required] [default: "{}"]
+  --alloc                  Existing accounts to prefund, as JSON {'address': {
+                           balance: '100000'}}          [string] [default: "{}"]
+  --accounts               Number of new accounts to generate and prefund
+                                                           [number] [default: 0]
+  --accountBalance         Balance allocated to each generated account
+                              [string] [default: "1000000000000000000000000000"]
   --noOutputTimestamp      Remove generated timestamp from output folder name
                                                       [boolean] [default: false]
 ```
@@ -119,11 +121,37 @@ npx @consensys/besu-genesis-tool --consensus clique --validators 3 \
   --alloc '{"0xfe3b557e8fb62b89f4916b721be55ceb828dbd73": {"balance": "1000000000000000000000"}}'
 ```
 
+QBFT network with 3 new prefunded accounts:
+
+```bash
+npx @consensys/besu-genesis-tool --consensus qbft --accounts 3 --accountBalance 1000000000000000000000
+```
+
 ### Accounts
 
-Each node (bootnode, validator and member) gets an Ethereum account, stored in the `account*` files in its directory. The account is prefunded in the genesis with `genesisNodeAllocation`. To change or remove allocations before the network starts, edit `genesis.json`.
+Besu only needs each node's `nodekey` to run. You'd normally create and hold account keys yourself, with a wallet such as MetaMask. If you want accounts that start with ETH on this private network, add them to the genesis. The tool asks how, or you can pass flags:
 
-Use `--alloc` to prefund other accounts.
+- **Existing accounts:** pass their addresses and balances with `--alloc`.
+- **New accounts:** pass `--accounts <n>` to generate `n` accounts, each prefunded with `--accountBalance`. Their keys are written to the `accounts/` folder.
+
+For example, to prefund two accounts you already hold, with 1,000 ETH and 50 ETH. Balances are in wei, so 1 ETH is `1000000000000000000`:
+
+```bash
+npx @consensys/besu-genesis-tool --consensus qbft \
+  --alloc '{
+    "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73": {"balance": "1000000000000000000000"},
+    "0x627306090abaB3A6e1400e9345bC60c78a8BEf57": {"balance": "50000000000000000000"}
+  }'
+```
+
+Use single quotes around the JSON so the shell leaves the double quotes alone. You can combine `--alloc` and `--accounts` in one run.
+
+Neither is on by default. To change or remove allocations before the network starts, edit `genesis.json`.
+
+Generated keystores have an empty password. To protect an account with a password, import its `privateKey` into a wallet such as MetaMask.
+
+> [!WARNING]
+> Each generated account's `privateKey` is unencrypted, and its `keystore` has an empty password. Anyone with these files controls the funds in the account. Move the `accounts/` folder somewhere safe, such as a secrets manager or an offline backup, and delete it from the output folder. Each node's `nodekey` is its identity on the network, so give it only to that node.
 
 `--quickstartDevAccounts` adds the well-known [besu-dev-quickstart](https://github.com/consensys-incorporated/besu-dev-quickstart) test accounts to the genesis. It defaults to `false`, on the assumption that the genesis is for production. _**Never use these accounts in production. Their private keys are public.**_
 
@@ -137,16 +165,17 @@ output/<TIMESTAMP>
   │   └──  nodekey                      # the node private key
   │   └──  nodekey.pub                  # the node's public key, used in the enode
   │   └──  address                      # the node's address, used to vote the validator in/out
-  │   └──  accountAddress               # the account's address
-  │   └──  accountKeystore              # the account's v3 keystore
-  │   └──  accountPassword              # the account's password (as supplied)
-  │   └──  accountPrivateKey            # the account's private key
   ├── validatorN
   │   └──  ...
   ├── bootnodeN
   │   └──  ...
   ├── memberN
   │   └──  ...
+  ├── accounts                          # only with generated accounts (--accounts)
+  │   └──  accountN
+  │        └──  address                 # the account's address, prefunded in genesis.json
+  │        └──  privateKey              # the account's private key (unencrypted)
+  │        └──  keystore                # the account's v3 keystore (empty password)
   ├── genesis.json                      # the genesis file for every Besu node
   ├── config.toml                       # a starter Besu config file
   ├── static-nodes.json                 # static nodes to make peering faster
@@ -159,7 +188,8 @@ output/<TIMESTAMP>
 
 1. Replace `<HOST>` in `static-nodes.json` and `permissioned-nodes.toml` with each node's host. The ports are Besu defaults, so check your firewall rules if you use different ones.
 2. Replace the `<REPLACE_ME>` and `<HOST>` placeholders in each node's copy of `config.toml`.
-3. Give each node its `nodekey`, plus the shared `genesis.json` and `config.toml`, then start it:
+3. If you generated accounts, move the `accounts/` folder somewhere safe (see [Accounts](#accounts)).
+4. Give each node its `nodekey`, plus the shared `genesis.json` and `config.toml`, then start it:
 
 ```bash
 besu --config-file=/config/config.toml
