@@ -22,19 +22,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Consensys/besu-genesis-tool.git"
+    "url": "git+https://github.com/consensys-incorporated/besu-genesis-tool.git"
   },
   "bugs": {
-    "url": "https://github.com/Consensys/besu-genesis-tool/issues"
+    "url": "https://github.com/consensys-incorporated/besu-genesis-tool/issues"
   },
-  "homepage": "https://github.com/Consensys/besu-genesis-tool#readme",
+  "homepage": "https://github.com/consensys-incorporated/besu-genesis-tool#readme",
   "contributors": [
     "Joshua Fernandes <3722503+joshuafernandes@users.noreply.github.com>"
   ],
   "license": "Apache-2.0",
   "keywords": [
     "besu",
-    "hyperledger-besu",
+    "lfdt-besu",
     "ethereum",
     "genesis",
     "genesis-file",

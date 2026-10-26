@@ -65,7 +65,7 @@ export function generateExtraDataString(validatorAddressList: Address[], consens
   let extraData: Input;
   switch (consensus) {
     case Consensus.clique: {
-      // clique just appends https://besu.hyperledger.org/en/latest/HowTo/Configure/Consensus-Protocols/Clique/
+      // clique just appends https://docs.besu-eth.org/private-networks/how-to/configure/consensus/clique/
       // 65 bytes for the proposer signature. In the genesis block there is no initial proposer, so the proposer signature is all zeros.
       // [0x prefix, 32 bytes vanity, List<Validators> (20bytes each), proposer signature - 65 bytes of 0s (see comment above)]
       const signers: string[] = validatorAddressList.map(_ => _.toString('hex'));

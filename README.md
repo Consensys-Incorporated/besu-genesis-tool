@@ -1,6 +1,6 @@
 # Besu Genesis Tool
 
-A CLI that generates everything you need to stand up a [Hyperledger Besu](https://besu.hyperledger.org/) network: a genesis file, node keys, account keys, static nodes, a permissions file and a starter `config.toml`.
+A CLI that generates everything you need to stand up an [LFDT Besu](https://docs.besu-eth.org/) (formerly under the Hyperledger project) network: a genesis file, node keys, account keys, static nodes, a permissions file and a starter `config.toml`.
 
 Supported consensus protocols: **QBFT** (default), **IBFT2** and **Clique**.
 
@@ -125,7 +125,7 @@ Each node (bootnode, validator and member) gets an Ethereum account, stored in t
 
 Use `--alloc` to prefund other accounts.
 
-`--quickstartDevAccounts` adds the well-known [quorum-dev-quickstart](https://github.com/Consensys/quorum-dev-quickstart) test accounts to the genesis. It defaults to `false`, on the assumption that the genesis is for production. _**Never use these accounts in production. Their private keys are public.**_
+`--quickstartDevAccounts` adds the well-known [quorum-dev-quickstart](https://github.com/consensys-incorporated/quorum-dev-quickstart) test accounts to the genesis. It defaults to `false`, on the assumption that the genesis is for production. _**Never use these accounts in production. Their private keys are public.**_
 
 ## Output
 
@@ -165,7 +165,7 @@ output/<TIMESTAMP>
 besu --config-file=/config/config.toml
 ```
 
-See the Besu docs on [configuration files](https://besu.hyperledger.org/public-networks/how-to/configuration-file) for more options.
+See the Besu docs on [configuration files](https://docs.besu-eth.org/public-networks/how-to/configuration-file) for more options.
 
 ## Development
 

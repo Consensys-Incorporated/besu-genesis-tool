@@ -52,4 +52,4 @@ Please remember to do the following:
 /opt/besu/bin/besu --config-file=/config/config.toml 
 ```
 
-Please refer to the [docs](https://besu.hyperledger.org/en/latest/HowTo/Configure/Using-Configuration-File/) for details on more cli args
+Please refer to the [docs](https://docs.besu-eth.org/public-networks/how-to/configuration-file) for details on more cli args
