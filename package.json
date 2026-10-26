@@ -1,0 +1,84 @@
+{
+  "name": "@consensys/besu-genesis-tool",
+  "version": "0.0.1",
+  "description": "A utility that lets developers create Besu genesis files, node keys, account keys and config",
+  "type": "module",
+  "main": "build/index.js",
+  "types": "build/typescript/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/typescript/index.d.ts",
+      "default": "./build/index.js"
+    }
+  },
+  "bin": {
+    "besu-genesis-tool": "./build/cli.js"
+  },
+  "files": [
+    "build"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Consensys/besu-genesis-tool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Consensys/besu-genesis-tool/issues"
+  },
+  "homepage": "https://github.com/Consensys/besu-genesis-tool#readme",
+  "contributors": [
+    "Joshua Fernandes <3722503+joshuafernandes@users.noreply.github.com>"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "besu",
+    "hyperledger-besu",
+    "ethereum",
+    "genesis",
+    "genesis-file",
+    "qbft",
+    "ibft2",
+    "clique"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf build output",
+    "prebuild": "rm -rf build",
+    "build": "tsc",
+    "postbuild": "cp -R src/templates build && chmod +x build/cli.js",
+    "test": "vitest run",
+    "lint": "eslint src",
+    "lintAndFix": "eslint --fix src",
+    "prepare": "npm run build",
+    "start": "node build/cli.js",
+    "release": "npm run clean && npm run build && npm run lint && npm test && npm publish --tag=latest"
+  },
+  "dependencies": {
+    "@ethereumjs/rlp": "^10.1.3",
+    "@ethereumjs/wallet": "^10.0.0",
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
+    "chalk": "^6.0.1",
+    "nunjucks": "^3.2.4",
+    "yargs": "^18.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^22.20.5",
+    "@types/nunjucks": "^3.2.6",
+    "@types/yargs": "^17.0.35",
+    "eslint": "^10.13.0",
+    "eslint-plugin-jsdoc": "^63.3.3",
+    "globals": "^17.13.0",
+    "jiti": "^2.7.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
+  }
+}
